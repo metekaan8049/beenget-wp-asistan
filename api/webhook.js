@@ -28,6 +28,9 @@ export async function POST(request) {
     return new Response('Server not configured', { status: 500 });
   }
 
+  // Vercel AI Gateway icin Vercel'in otomatik verdigi kimlik (anahtar gerekmez)
+  cfg.oidcToken = request.headers.get('x-vercel-oidc-token') || cfg.oidcToken;
+
   const raw = await request.text();
   if (!verifySignature(raw, request.headers.get('x-hub-signature-256'), cfg.waAppSecret)) {
     return new Response('Invalid signature', { status: 401 });
