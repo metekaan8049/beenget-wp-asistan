@@ -1,6 +1,6 @@
 # Beenget WhatsApp Asistanı
 
-Beenget'in WhatsApp Business numarasına gelen mesajları yapay zekâ (Claude) ile 7/24 cevaplayan asistan.
+Beenget'in WhatsApp Business numarasına gelen mesajları yapay zekâ ile 7/24 cevaplayan asistan.
 
 **Ne yapar?**
 - Müşterinin dilinde (Türkçe, İngilizce, Almanca, Rusça…) anında cevap verir.
@@ -9,7 +9,7 @@ Beenget'in WhatsApp Business numarasına gelen mesajları yapay zekâ (Claude) i
 - Şikâyet, hasar, mevcut rezervasyon değişikliği veya "insanla görüşmek istiyorum" gibi durumlarda konuşmayı **size devreder**. Bot o müşteriye 12 saat cevap vermez, siz devralırsınız.
 - Kendi kişisel WhatsApp numaranızdan komutlarla botu yönetirsiniz.
 
-**Altyapı:** Vercel (sunucu), WhatsApp Cloud API (Meta), Claude API (Anthropic), Supabase (veritabanı), Resend (e-posta bildirimi). Kodun ek bir paket bağımlılığı yoktur.
+**Altyapı:** Vercel (sunucu), WhatsApp Cloud API (Meta), Vercel AI Gateway (yapay zekâ), Supabase (veritabanı), Resend (e-posta bildirimi). Kodun ek bir paket bağımlılığı yoktur.
 
 ---
 
@@ -19,8 +19,9 @@ Beenget'in WhatsApp Business numarasına gelen mesajları yapay zekâ (Claude) i
 Supabase > projeniz > **SQL Editor** > New query > `supabase/schema.sql` dosyasının içeriğini yapıştırın > **Run**.
 Ardından **Project Settings > API** bölümünden `Project URL` ve `service_role` anahtarını not alın.
 
-### 2) Claude API anahtarı alın
-console.anthropic.com > **API Keys** > Create Key. Kullanım başına ücretlendirilir, hesaba bakiye yüklemeniz gerekir.
+### 2) Yapay zekâ (ücretsiz)
+Varsayılan olarak **Vercel AI Gateway** kullanılır: Vercel'de çalışırken anahtar gerekmez, her ay 5$ ücretsiz kredi gelir (kredi satın almadığınız sürece ücretsiz kalır). Model `AI_MODEL` ile seçilir (varsayılan `google/gemini-3.8-flash`).
+Alternatifler: `GEMINI_API_KEY` (Google AI Studio, ücretsiz katman) veya `ANTHROPIC_API_KEY` (Claude, ücretli). Hangi anahtar girilirse o kullanılır; `AI_PROVIDER=gateway|gemini|anthropic` ile zorlayabilirsiniz.
 
 ### 3) WhatsApp Cloud API'yi kurun
 1. business.facebook.com üzerinde bir **Meta Business** hesabınız olsun (Beenget adına).
@@ -67,7 +68,7 @@ Not: WhatsApp kuralı gereği sahibe WhatsApp bildirimi, ancak son 24 saat için
 Supabase > **Table Editor** > `wa_reservation_requests`. Talebi işledikten sonra `status` sütununu `teyit_edildi` veya `iptal` yapabilirsiniz. Tüm yazışmalar `wa_messages` tablosundadır.
 
 ## Maliyet (yaklaşık)
-- **Claude:** mesaj başına genelde birkaç kuruş. Daha ucuzu için `CLAUDE_MODEL=claude-haiku-5-5`.
+- **Yapay zekâ:** Vercel AI Gateway'in aylık 5$ ücretsiz kredisi küçük bir işletme için genelde yeterlidir; biterse ay sonuna kadar asistan "ekibimiz dönecek" yedek cevabını verir.
 - **WhatsApp:** müşterinin başlattığı konuşmalara 24 saat içinde verilen cevaplar için Meta'nın güncel fiyatlandırmasına bakın.
 - **Vercel, Supabase, Resend:** küçük hacimde ücretsiz planlar yeterli.
 
